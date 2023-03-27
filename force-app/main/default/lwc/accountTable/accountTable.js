@@ -7,7 +7,7 @@ const columns = [
     { label: 'BIL_ID__C', fieldName: 'BIL_ID__c' },
     { label: 'RC__C', fieldName: 'RC__c' },
     { label: 'ICE__C', fieldName: 'ICE__c' },
-    { label: 'Record Type', fieldName: 'RecordTypeId' },
+    { label: 'Record Type', fieldName: 'rt' },
 
 ];
  
@@ -22,13 +22,24 @@ export default class accountTable extends LightningElement {
     @track columns = columns;
     @track searchString;
     @track initialRecords;
- 
+    @track filteredData;
+    @track newData = [];
+
     @wire(retrieveAccounts)
     wiredAccount({ error, data }) {
         if (data) {
-            console.log(data);
-            this.data = data;
-            this.initialRecords = data;
+            // console.log(data);
+             data.forEach(element => {
+                let a = {
+                    rt: element.RecordType.Name,
+                };                
+                let employee = Object.assign(a,element)
+                console.log(JSON.parse(JSON.stringify(employee)))
+                this.newData.push(JSON.parse(JSON.stringify(employee)))
+            });
+            this.data = this.newData;
+            this.filteredData = this.data;
+            this.initialRecords = this.newData;
             this.error = undefined;
         } else if (error) {
             this.error = error;
@@ -45,9 +56,9 @@ export default class accountTable extends LightningElement {
         const searchKey = event.target.value.toLowerCase();
  
         if (searchKey) {
-            this.data = this.initialRecords;
+            this.filteredData = this.initialRecords;
  
-            if (this.data) {
+            if (this.filteredData) {
                 let searchRecords = [];
  
                 for (let record of this.data) {
@@ -68,10 +79,10 @@ export default class accountTable extends LightningElement {
                 }
  
                 console.log('Matched Accounts are ' + JSON.stringify(searchRecords));
-                this.data = searchRecords;
+                this.filteredData = searchRecords;
             }
         } else {
-            this.data = this.initialRecords;
+            this.filteredData = this.initialRecords;
         }
     }
     get bDisableFirst() {
@@ -118,5 +129,41 @@ export default class accountTable extends LightningElement {
             }
             this.recordsToDisplay.push(this.records[i]);
         }
+    }
+    handleFilterChange(event) {
+        const filter = event.target.value.toLowerCase();
+        this.filteredData = this.data.filter(account => 
+            account.Name.toLowerCase().includes(filter)
+        );
+    }
+    handleFilterChangeASAIDPRS(event) {
+        const filter = event.target.value.toLowerCase();
+        this.filteredData = this.data.filter(account => 
+            account.ASAIDPRS__c.toLowerCase().includes(filter)
+        );
+    }
+    handleFilterChangeRC(event) {
+        const filter = event.target.value.toLowerCase();
+        this.filteredData = this.data.filter(account => 
+            account.RC__c.toLowerCase().includes(filter)
+        );
+    }
+    handleFilterChangeBIL(event) {
+        const filter = event.target.value.toLowerCase();
+        this.filteredData = this.data.filter(account => 
+            account.BIL_ID__c.toLowerCase().includes(filter)
+        );
+    }
+    handleFilterChangeICE(event) {
+        const filter = event.target.value.toLowerCase();
+        this.filteredData = this.data.filter(account => 
+            account.ICE__c.toLowerCase().includes(filter)
+        );
+    }
+    handleFilterChangeRT(event) {
+        const filter = event.target.value.toLowerCase();
+        this.filteredData = this.data.filter(account => 
+            account.rt.toLowerCase().includes(filter)
+        );
     }
 }

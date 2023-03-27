@@ -7,8 +7,35 @@
                     <lightning-input type="search" label="Search Account" onchange={handleSearch}></lightning-input>
                 </lightning-layout-item>
             </lightning-layout>
+            <lightning-layout multiple-rows>
+                <lightning-layout-item size="2" padding="around-small">
+
+                <lightning-input type="text" label="Filter By Name" onchange={handleFilterChange}></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="2" padding="around-small">
+
+                <lightning-input type="text" label="Filter By ASAIDPRS" onchange={handleFilterChangeASAIDPRS}></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="2" padding="around-small">
+
+                <lightning-input type="text" label="Filter By BIL ID" onchange={handleFilterChangeBIL}></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="2" padding="around-small">
+
+                <lightning-input type="text" label="Filter By RC" onchange={handleFilterChangeRC}></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="2" padding="around-small">
+
+                <lightning-input type="text" label="Filter By ICE" onchange={handleFilterChangeICE}></lightning-input>
+            </lightning-layout-item>
+           
+            <lightning-layout-item size="2" padding="around-small">
+
+                <lightning-input type="text" label="Filter By Record Type" onchange={handleFilterChangeRT}></lightning-input>
+            </lightning-layout-item>
+            </lightning-layout>
             <template if:true={data}>
-                <lightning-datatable key-field="Id" data={data} columns={columns} hide-checkbox-column="true"
+                <lightning-datatable key-field="Id" data={filteredData} columns={columns} hide-checkbox-column="true"
                     show-row-number-column="true" onrowaction={handleRowAction}>
                 </lightning-datatable>
             </template>
